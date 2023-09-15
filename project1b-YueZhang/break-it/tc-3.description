@@ -1,0 +1,7 @@
+Root cause: not handle map with complex string value with invalid percent encoding
+Expected output: Error
+
+Without proper validation, it makes a complex string with invalid percent encoding like '%2Z' can be parsed.
+So, validate the percent-encoded sequences before decoding.
+Ensure that each sequence starts with a % followed by two valid hexadecimal digits.
+Thus, the match function should be re.match(r'^([^%]*%[0-9A-Fa-f]{2})*[^%]*$', data)

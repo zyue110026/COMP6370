@@ -1,0 +1,6 @@
+Root Cause: not handle map with duplicate keys
+Expected output: Error
+When parsing a map in the nosj format, it's crucial to ensure that each key is unique.
+When parsing each key-value pair, check if the key already exists in the map you're building.
+If the key already exists, raise an error indicating that the input map contains duplicate keys.
+If the key doesn't exist, add it to the map as usual.
