@@ -14,17 +14,18 @@ def find_collision(start, end):
 
     for n in range(start, end):
         h = hashlib.sha256((EMAIL % n).encode()).digest()[:4]
-
-        # Check if the first four bytes match the target prefix
-        if h == TARGET_PREFIX and len(INPUTS) < 2:
-            if len(INPUTS) == 0:
-                INPUTS.append(EMAIL % n)
-                sys.stdout.write(f"{EMAIL % n}\n")
-            elif len(INPUTS) == 1:
-                if (EMAIL % n) != INPUTS[0]:
+        if len(INPUTS) < 2:
+            # Check if the first four bytes match the target prefix
+            if h == TARGET_PREFIX:
+                if len(INPUTS) == 0:
                     INPUTS.append(EMAIL % n)
                     sys.stdout.write(f"{EMAIL % n}\n")
-
+                elif len(INPUTS) == 1:
+                    if (EMAIL % n) != INPUTS[0]:
+                        INPUTS.append(EMAIL % n)
+                        sys.stdout.write(f"{EMAIL % n}\n")
+        else:
+            return 0
 
 def main():
     print(len(INPUTS))
