@@ -10,7 +10,7 @@ INPUTS = []
 
 
 def find_collision(start, end):
-    print("start collision")
+    # print("start collision")
 
     for n in range(start, end):
         h = hashlib.sha256((EMAIL % n).encode()).digest()[:4]
@@ -28,13 +28,13 @@ def find_collision(start, end):
             return 0
 
 def main():
-    print(len(INPUTS))
+    # print(len(INPUTS))
     random.seed(time.time())
     start = random.randint(0, 1000000000000)
     end = 1000000000000
 
     while len(INPUTS) != 2:
-        sys.stdout.write(f"start: {start} end: {end} INPUTS: {len(INPUTS)}")
+        # sys.stdout.write(f"start: {start} end: {end} INPUTS: {len(INPUTS)}")
         find_collision(start, end)
         if start <= end:
             end = start
