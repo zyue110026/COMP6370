@@ -1,35 +1,47 @@
 #!/usr/bin/python3
 import hashlib
 import sys
+import random
+import time
 
 EMAIL = 'yzz0229@auburn.edu%d'
 TARGET_PREFIX = EMAIL[:3].encode() + b'\x00'
+INPUTS = []
 
 
-def find_collision():
-    seen_hashes = {}
-    n = 0
-    while True:
+def find_collision(start, end):
+    print("start collision")
+
+    for n in range(start, end):
         h = hashlib.sha256((EMAIL % n).encode()).digest()[:4]
 
         # Check if the first four bytes match the target prefix
-        if h == TARGET_PREFIX:
-            if h in seen_hashes:
-                sys.stdout.write(f"{EMAIL % seen_hashes[h]}\n")
+        if h == TARGET_PREFIX and len(INPUTS) < 2:
+            if len(INPUTS) == 0:
+                INPUTS.append(EMAIL % n)
                 sys.stdout.write(f"{EMAIL % n}\n")
-                sys.exit(0)
+            elif len(INPUTS) == 1:
+                if (EMAIL % n) != INPUTS[0]:
+                    INPUTS.append(EMAIL % n)
+                    sys.stdout.write(f"{EMAIL % n}\n")
 
-            else:
-                seen_hashes[h] = n
-        n += 1
 
 def main():
-    find_collision()
+    print(len(INPUTS))
+    random.seed(time.time())
+    start = random.randint(0, 1000000000000)
+    end = 1000000000000
 
-    #input 1: yzz0229@auburn.edu4832951051
-    #input 2: yzz0229@auburn.edu5660354521
-    # print(hashlib.sha256('yzz0229@auburn.edu4832951051'.encode()).digest().hex())
-    # print(hashlib.sha256('yzz0229@auburn.edu5660354521'.encode()).digest().hex())
-    # print(EMAIL[:3].encode().hex())
+    while len(INPUTS) != 2:
+        sys.stdout.write(f"start: {start} end: {end} INPUTS: {len(INPUTS)}")
+        find_collision(start, end)
+        if start <= end:
+            end = start
+            if end > 3:
+                start = random.randint(0, end)
+            else:
+                sys.stderr.write("Can not find valid inputs")
+                sys.exit(0)
+
 if __name__ == "__main__":
     main()
